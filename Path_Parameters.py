@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from enum import Enum
-
 app = FastAPI()
 
 BOOKS = [
@@ -66,5 +65,5 @@ def get_book_by_month(book_month: Months):
 
 
 @app.post("/filepath/{file_path:path}")
-def send_path_as_path_parameter(file_path: str):
+def send_path_as_path_parameter(file_path:str):    # cant be optional
     return {"Path": file_path}
