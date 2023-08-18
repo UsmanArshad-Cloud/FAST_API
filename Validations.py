@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Query
-from typing import Optional, Annotated
+from typing import Optional, Annotated, Union
 from enum import Enum
 
 app = FastAPI()
@@ -38,3 +38,23 @@ async def get(skip: Annotated[int, Query(le=len(BOOKS), ge=0)] = 0,
             new_books.append(book)
         index += 1
     return new_books
+
+@app.get("/items/")
+async def read_items(
+    q: Annotated[
+        Union[str, None],
+        Query(
+            alias="item-query",
+            title="Query string",
+            description="Query string for the items to search in the database that have a good match",
+            min_length=3,
+            max_length=50,
+            # pattern="^fixed_query$",
+            deprecated=True,
+        ),
+    ] = None
+):
+    results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+    if q:
+        results.update({"q": q})
+    return results
